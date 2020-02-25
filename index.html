@@ -1,3 +1,46 @@
-<html>
-  22323
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Exchange</title>
+	<link href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<section class="mt-5">
+		<div class="container">
+			<h1 class="text-center mb-5">Конвертация доллара в юани</h1>
+			<div class="row">
+				<form name="exchange" class="col-12 d-flex align-items-end">
+					<div class="form-group col-5">
+						<label for="dollars">Доллары</label>
+						<input name="dollars" id="dollars" class="form-control" value="100">
+					</div>
+					<div class="form-group col-5">
+						<label for="uan">Юани</label>
+						<input name="uan" id="uan" class="form-control" disabled>
+					</div>
+					<div class="form-group col-2">
+						<button name="button" class="btn btn-primary">Конвертация</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+</body>
+<script src="vendor/components/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		$('.btn').on('click', function(e){
+			e.preventDefault();
+
+			$.post('/exchange.php', { dollars: $('#dollars').val()}, function(result){
+				console.log(result);
+				if (result.type == 'success') {
+					$('#uan').val(result.chy);
+				}
+			},"json");
+		});
+	});
+</script>
 </html>
