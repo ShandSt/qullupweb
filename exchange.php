@@ -1,5 +1,7 @@
 <?php
 class Exchange {
+	private $nominal = 1;
+
 	function __construct()
 	{
 		$xmlToday = $this->getDataFromBank(date('d/m/Y'));
@@ -8,7 +10,7 @@ class Exchange {
 		if(!empty($_POST['dollars'])) {
 			$result = array(
 				'type' => 'success',
-				'chy' => $_POST['dollars'] * round($dataToday['CNY']/10, 2)
+				'chy' => $_POST['dollars'] * round($dataToday['CNY']/$this->nominal, 2)
 			);
 		}
 		else {
@@ -24,9 +26,16 @@ class Exchange {
 		$pattern = "#<Valute ID=\"([^\"]+)[^>]+>[^>]+>([^<]+)[^>]+>[^>]+>[^>]+>[^>]+>[^>]+>[^>]+>([^<]+)[^>]+>[^>]+>([^<]+)#i";
 		preg_match_all($pattern, $xml, $out, PREG_SET_ORDER);
 		$exchange = array();
+
 		foreach($out as $cur)
 		{
-			if($cur[2] == 156) $exchange['CNY'] = str_replace(",",".",$cur[4]);
+			if($cur[2] == 156) {
+				$exchange['CNY'] = str_replace(",",".",$cur[4]);
+
+				$nominal = explode("<Nominal>", $cur[0]);
+				$nominal = explode("</Nominal>", $nominal[1]);
+				$this->nominal = $nominal[0];
+			}
 		}
 		return $exchange;
 	}
