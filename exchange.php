@@ -22,6 +22,9 @@ class Exchange {
 		print json_encode($result);
 	}
 
+	private function validPost($usd) {
+	}
+
 	private function parseExchange($xml) {
 		$pattern = "#<Valute ID=\"([^\"]+)[^>]+>[^>]+>([^<]+)[^>]+>[^>]+>[^>]+>[^>]+>[^>]+>[^>]+>([^<]+)[^>]+>[^>]+>([^<]+)#i";
 		preg_match_all($pattern, $xml, $out, PREG_SET_ORDER);
